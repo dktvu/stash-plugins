@@ -178,19 +178,21 @@ def safe_json_preview(data: Any) -> str:
 # =========================
 # Logging
 # =========================
-def switch_scene_log(logger: logging.Logger, scene_id: int):
-    """Switch the log file to a new scene-specific file."""
+def switch_scene_log(logger: logging.Logger, scene_id: int) -> None:
+    """Switch the log file to a new scene-specific file when file logging is enabled."""
     for handler in logger.handlers:
         if isinstance(handler, logging.FileHandler):
             base_dir = Path(handler.baseFilename).parent
             new_file = base_dir / f"scene_{scene_id}.log"
-            # Close current file and reassign
             handler.close()
             handler.baseFilename = str(new_file)
             handler.stream = handler._open()
             logger.info(f"Logging switched to scene {scene_id}")
             return
-    raise RuntimeError("No FileHandler found to switch log file")
+    logger.debug(
+        "File logging disabled (no FileHandler); skipping per-scene log for %s",
+        scene_id,
+    )
 
 
 class ColoredFormatter(logging.Formatter):

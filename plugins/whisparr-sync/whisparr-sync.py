@@ -679,11 +679,12 @@ class StashHelpers:
 # =========================
 def preprocessor(dev: bool):
     global logger
+    plugin_dir = Path(__file__).resolve().parent
     if dev:
         stash_log.info("\n\n***DEV_MODE***\n\n")
         toml_path = "../../dev.toml"
     else:
-        toml_path = "/root/.stash/plugins/whisparr-sync/config.toml"
+        toml_path = str(plugin_dir / "config.toml")
     STASH_DATA = {}
     if not dev:
         try:
@@ -692,7 +693,9 @@ def preprocessor(dev: bool):
                 stash_log.error("No input data received from Stash hook.")
                 return
             STASH_DATA = json.loads(raw_data)
-            toml_path = f'{STASH_DATA.get("PluginDir")}/config.toml'
+            conn = STASH_DATA.get("server_connection") or {}
+            stash_plugin_dir = conn.get("PluginDir") or str(plugin_dir)
+            toml_path = str(Path(stash_plugin_dir) / "config.toml")
         except Exception as e:
             print(f"Failed to parse input JSON: {e}")
             return
