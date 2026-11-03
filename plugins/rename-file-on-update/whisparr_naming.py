@@ -83,8 +83,8 @@ class NamingContext:
     """
     Stash scene and file fields used to resolve naming tokens.
 
-    ``studio_network`` may be set to the root parent studio name when Stash has no
-    Whisparr-style network field.
+    ``studio_network`` is the top-level studio name when the scene studio has a
+    parent in Stash (Whisparr ``Studio.Network`` has no direct equivalent otherwise).
     """
 
     scene: Mapping
@@ -455,6 +455,8 @@ def build_token_handlers(context: NamingContext, multiple_tokens: bool) -> Token
         )
 
     network = context.studio_network or ""
+    if network and studio and clean_title(network) == clean_title(studio):
+        network = ""
     handlers.set("{Studio Network}", lambda _: network)
     handlers.set("{Studio CleanNetwork}", lambda _: clean_title(network))
     handlers.set("{Studio CleanNetworkSlug}", lambda _: slug_title(clean_title(network)))

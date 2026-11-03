@@ -31,9 +31,15 @@ def get_parent_studio_chain(stash, scene):
 
 
 def get_root_studio_name(stash, scene) -> str:
-    """Top-level studio name in the hierarchy, used as a network fallback."""
+    """
+    Whisparr ``{Studio Network}`` fallback for Stash scenes.
+
+    When the scene studio has a parent, returns the top-level studio name in the
+    hierarchy. When there is no parent (studio is already the root), returns empty
+    so ``{Studio CleanNetwork}/{Studio CleanTitle}`` does not repeat the same folder.
+    """
     current_studio = scene.get("studio") or {}
-    if not current_studio:
+    if not current_studio or not current_studio.get("parent_studio"):
         return ""
 
     root_name = current_studio.get("name") or ""
