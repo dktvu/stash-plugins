@@ -22,7 +22,7 @@ Automated management of scene files, including:
 ---
 ## Requirements
 
-- Stash with the community **[PythonDepManager](https://discourse.stashapp.cc/t/pythondepmanager/1801)** plugin (this plugin declares `requires: PythonDepManager` so Stash can pull it in from the community index when available).
+- Stash with the community **[PythonDepManager](https://discourse.stashapp.cc/t/pythondepmanager/1801)** plugin installed (required once per Stash instance; when installing from this repo’s plugin index, the `# requires: PythonDepManager` line in `whisparr-sync.yml` adds that dependency to the package index automatically).
 - Python dependencies (`tomli`, `pydantic`, `requests`, `stashapi`) are installed automatically on first run via `ensure_import` in `whisparr-sync.py`. Versions are pinned in `requirements.txt` for local development only.
 
 ### Docker notes
