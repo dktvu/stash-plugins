@@ -1,6 +1,6 @@
 name: Whisparr Sync
 description: Add matched StashDB scene to Whisparr on update
-version: 1.0.5
+version: 1.0.6
 exec:
   - python
   - "{pluginDir}/whisparr-sync.py"

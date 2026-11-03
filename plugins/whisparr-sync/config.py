@@ -67,11 +67,19 @@ class PluginConfig(BaseModel):
                 return [t.strip() for t in v.split(",") if t.strip()]
         return list(v)
 
-    @field_validator("LOG_FILE_LOCATION", "ROOT_FOLDER", mode="before")
+    @field_validator("ROOT_FOLDER", mode="before")
     @classmethod
-    def normalize_paths(cls, v):
+    def normalize_optional_path(cls, v):
         if v in ("", None):
             return None
+        return Path(v).expanduser().resolve()
+
+    @field_validator("LOG_FILE_LOCATION", mode="before")
+    @classmethod
+    def normalize_log_file_location(cls, v):
+        """Empty Stash/TOML values mean use the default log directory."""
+        if v in ("", None):
+            return Path("./logs")
         return Path(v).expanduser().resolve()
 
     @field_validator("WHISPARR_URL", "WHISPARR_KEY", mode="before")
