@@ -22,8 +22,10 @@ Automated management of scene files, including:
 ---
 ## Requirements
 
-- Stash with the community **[PythonDepManager](https://discourse.stashapp.cc/t/pythondepmanager/1801)** plugin installed (required once per Stash instance; when installing from this repo’s plugin index, the `# requires: PythonDepManager` line in `whisparr-sync.yml` adds that dependency to the package index automatically).
+- Stash with the community **[PythonDepManager](https://discourse.stashapp.cc/t/pythondepmanager/1801)** plugin installed from **Community (stable)**. This is a separate install from whisparr-sync; the `# requires: PythonDepManager` comment only applies when both packages exist in the **same** custom plugin index (it does not pull PythonDepManager from the official Community source).
 - Python dependencies (`tomli`, `pydantic`, `requests`, `stashapi`) are installed automatically on first run via `ensure_import` in `whisparr-sync.py`. Versions are pinned in `requirements.txt` for local development only.
+
+If you see `ModuleNotFoundError: No module named 'PythonDepManager'`, install PythonDepManager from the Community stable source first, then update whisparr-sync to v1.0.3+ (which adds `plugins/community` to the import path when needed).
 
 ### Docker notes
 
@@ -34,9 +36,9 @@ Automated management of scene files, including:
 ---
 ## Installation
 
-1. Install **PythonDepManager** from Stash → Settings → Plugins → Available Plugins (Community), if it is not already present.
-2. Install or copy this plugin into your Stash `plugins` directory (entire `whisparr-sync` folder, including `config.py` and `whisparr-sync.yml`).
-3. Reload plugins in Stash. The first hook or task run may take longer while dependencies download.
+1. Install **PythonDepManager** from Stash → Settings → Plugins → Available Plugins → **Community (stable)**. Confirm it appears under Installed Plugins.
+2. Install or update **whisparr-sync** (from this repo’s source or by copying the plugin folder into `plugins/whisparr-sync/`).
+3. Reload plugins. The first hook or task run may take longer while dependencies download.
 
 Configure from `config.toml` or the Stash plugin settings UI.
 
