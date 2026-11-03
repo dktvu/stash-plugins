@@ -26,7 +26,7 @@ Optional **affixes** around tokens (Whisparr behavior): `{[Quality Title]}` omit
 | `{Release Date}`, `{Release ShortDate}`, `{Release Year}` | `scene.date` |
 | Performer tokens | `scene.performers` (`name`, `gender`, `disambiguation` as alias) |
 | Studio tokens | `scene.studio.name` |
-| `{Studio Network}`, `{Studio CleanNetwork}`, `{Studio CleanNetworkSlug}` | Root **parent** studio name (Stash has no network field) |
+| `{Studio Network}`, `{Studio CleanNetwork}`, `{Studio CleanNetworkSlug}` | Top-level studio when the scene studio has a **parent** in Stash; otherwise empty (matches Whisparr when `Studio.Network` is unset) |
 | `{StashId}` | `scene.stash_ids` (prefers Stash endpoint) |
 | `{ImdbId}`, `{TmdbId}` | Matching `stash_ids` endpoints |
 | `{Movie *}` | Mapped from scene title / first group name |

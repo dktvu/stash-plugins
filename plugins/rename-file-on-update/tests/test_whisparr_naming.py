@@ -105,6 +105,21 @@ def test_folder_path_segments(sample_context):
     assert "2010" in result
 
 
+def test_folder_path_no_duplicate_network_when_same_as_studio(sample_context):
+    """Whisparr omits network tokens when network equals studio title."""
+    sample_context.studio_network = "Studio Title"
+    pattern = "{Studio CleanNetwork}/{Studio CleanTitle}/{Release Year}"
+    result = apply_naming_pattern(pattern, sample_context, for_folder=True)
+    assert result.replace("\\", "/") == "Studio Title/2010"
+
+
+def test_folder_path_includes_network_when_different_from_studio(sample_context):
+    sample_context.studio_network = "Network Title"
+    pattern = "{Studio CleanNetwork}/{Studio CleanTitle}/{Release Year}"
+    result = apply_naming_pattern(pattern, sample_context, for_folder=True)
+    assert result.replace("\\", "/") == "Network Title/Studio Title/2010"
+
+
 def test_duplicate_suffix_placeholder():
     assert apply_duplicate_suffix(" ({index})", 2) == " (2)"
     assert apply_duplicate_suffix(" ($index$)", 3) == " (3)"
