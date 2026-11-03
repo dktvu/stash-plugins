@@ -22,23 +22,20 @@ Automated management of scene files, including:
 ---
 ## Requirements
 
-- Stash with the community **[PythonDepManager](https://discourse.stashapp.cc/t/pythondepmanager/1801)** plugin installed from **Community (stable)**. This is a separate install from whisparr-sync; the `# requires: PythonDepManager` comment only applies when both packages exist in the **same** custom plugin index (it does not pull PythonDepManager from the official Community source).
-- Python dependencies (`tomli`, `pydantic`, `requests`, `stashapi`) are installed automatically on first run via `ensure_import` in `whisparr-sync.py`. Versions are pinned in `requirements.txt` for local development only.
-
-If you see `ModuleNotFoundError: No module named 'PythonDepManager'`, install PythonDepManager from the Community stable source first, then update whisparr-sync to v1.0.3+ (which adds `plugins/community` to the import path when needed).
+- Stash with Python available for plugins (official Docker images include Python and `pip`).
+- Python dependencies (`tomli`, `pydantic`, `requests`, `stashapi`) are installed automatically on first run via `plugin_deps.ensure_import` into `plugins/py_dependencies/`. Versions are pinned in `requirements.txt` for local development only.
 
 ### Docker notes
 
-- You do **not** need a separate venv or manual `pip install` for this plugin’s PyPI dependencies.
-- The Stash container must have **`pip`** (used by PythonDepManager). Official images include it.
-- Git is only required if a dependency is installed from a Git URL; this plugin uses PyPI packages only.
+- No separate venv, **PythonDepManager**, or **`git`** is required for this plugin.
+- The first hook or task run may take longer while `pip` downloads wheels into the mounted config volume (`py_dependencies` persists across restarts).
 
 ---
 ## Installation
 
-1. Install **PythonDepManager** from Stash → Settings → Plugins → Available Plugins → **Community (stable)**. Confirm it appears under Installed Plugins.
-2. Install or update **whisparr-sync** (from this repo’s source or by copying the plugin folder into `plugins/whisparr-sync/`).
-3. Reload plugins. The first hook or task run may take longer while dependencies download.
+1. Install or update **whisparr-sync** (from this repo’s plugin source or copy the folder to `plugins/whisparr-sync/`).
+2. Reload plugins in Stash.
+3. Trigger the plugin once; check **Settings → Logs** if `pip install` fails (network, disk space, or permissions on the config volume).
 
 Configure from `config.toml` or the Stash plugin settings UI.
 

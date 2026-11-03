@@ -11,43 +11,9 @@ import time
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional, Tuple, Type, Union
 
+from plugin_deps import ensure_import
 
-def _register_python_dep_manager() -> None:
-    """
-    Ensure ``PythonDepManager`` can be imported before ``ensure_import`` runs.
-
-    Stash prepends the plugin YAML's *grandparent* directory to ``PYTHONPATH``
-    (see ``pkg/plugin/raw.go``). A plugin at ``plugins/whisparr-sync/`` therefore
-    sees ``plugins/`` on the path, while Community installs place
-    ``PythonDepManager`` under ``plugins/community/PythonDepManager/``. Add
-    ``plugins/community`` to ``sys.path`` when that layout is present.
-    """
-    plugin_dir = Path(__file__).resolve().parent
-    plugins_root = plugin_dir.parent
-    search_roots = (plugins_root, plugins_root / "community")
-    for root in search_roots:
-        dep_manager = root / "PythonDepManager"
-        if dep_manager.is_dir() and (dep_manager / "deps.py").is_file():
-            root_str = str(root)
-            if root_str not in sys.path:
-                sys.path.insert(0, root_str)
-            return
-
-
-_register_python_dep_manager()
-
-try:
-    from PythonDepManager import ensure_import
-except ModuleNotFoundError:
-    print(
-        "Whisparr Sync: PythonDepManager is not installed or not on PYTHONPATH.\n"
-        "Install the PythonDepManager plugin from Stash → Settings → Plugins → "
-        "Available Plugins (Community stable source), then reload plugins.",
-        file=sys.stderr,
-    )
-    raise SystemExit(1)
-
-# Versions match requirements.txt; installed on first run into PythonDepManager's cache.
+# Versions match requirements.txt; installed on first run under plugins/py_dependencies/.
 ensure_import(
     "tomli==2.3.0",
     "pydantic==2.12.5",
