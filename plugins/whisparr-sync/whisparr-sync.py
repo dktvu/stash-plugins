@@ -11,6 +11,16 @@ import time
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional, Tuple, Type, Union
 
+from PythonDepManager import ensure_import
+
+# Versions match requirements.txt; installed on first run into PythonDepManager's cache.
+ensure_import(
+    "tomli==2.3.0",
+    "pydantic==2.12.5",
+    "requests==2.32.5",
+    "stashapi==0.1.2",
+)
+
 import requests
 import tomli
 from config import (PluginConfig, load_config_logging, safe_json_preview,

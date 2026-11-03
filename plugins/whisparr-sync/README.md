@@ -22,29 +22,23 @@ Automated management of scene files, including:
 ---
 ## Requirements
 
-- Python 3.10+ (or tomli)
-- Pydantic
-- Requests
-- `stashapi` library (custom Stash API interface)
+- Stash with the community **[PythonDepManager](https://discourse.stashapp.cc/t/pythondepmanager/1801)** plugin (this plugin declares `requires: PythonDepManager` so Stash can pull it in from the community index when available).
+- Python dependencies (`tomli`, `pydantic`, `requests`, `stashapi`) are installed automatically on first run via `ensure_import` in `whisparr-sync.py`. Versions are pinned in `requirements.txt` for local development only.
+
+### Docker notes
+
+- You do **not** need a separate venv or manual `pip install` for this plugin’s PyPI dependencies.
+- The Stash container must have **`pip`** (used by PythonDepManager). Official images include it.
+- Git is only required if a dependency is installed from a Git URL; this plugin uses PyPI packages only.
+
 ---
 ## Installation
 
-Add this repository to your sources in whisparr. Configure from toml or GUI. 
+1. Install **PythonDepManager** from Stash → Settings → Plugins → Available Plugins (Community), if it is not already present.
+2. Install or copy this plugin into your Stash `plugins` directory (entire `whisparr-sync` folder, including `config.py` and `whisparr-sync.yml`).
+3. Reload plugins in Stash. The first hook or task run may take longer while dependencies download.
 
-
-
-Manual Installation:
-
-1. Copy `whisparr-sync.py` and `whisparr-sync.yml` into your Stash plugins directory.  
-2. Install the required Python dependency:
-
-   ```bash
-   pip install stashapp-tools
-   pip install pydantic
-   pip install tomli (Python<3.10)
-   ```
-
-3. Restart or reload Stash to pick up the new plugin.
+Configure from `config.toml` or the Stash plugin settings UI.
 
 ---
 
