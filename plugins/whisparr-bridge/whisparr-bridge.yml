@@ -1,0 +1,28 @@
+name: Whisparr Bridge
+description: Add matched StashDB scenes to Whisparr on update; rescan when already added (pairs with rename-file-on-update).
+version: 0.6
+exec:
+  - python
+  - "{pluginDir}/whisparr-bridge.py"
+interface: raw
+
+hooks:
+  - name: Add on scene update
+    triggeredBy:
+      - Scene.Update.Post
+
+settings:
+  WHISPARR_URL:
+    displayName: Whisparr URL
+    type: STRING
+  WHISPARR_API_KEY:
+    displayName: Whisparr API Key
+    type: STRING
+  STASHDB_ENDPOINT_SUBSTR:
+    displayName: StashDB host match (e.g. stashdb.org)
+    description: Only change this if whisparr adds custom stashbox support
+    type: STRING
+  MONITORED:
+    displayName: Monitor after add
+    description: Mark the scene as monitored when synced
+    type: BOOLEAN
